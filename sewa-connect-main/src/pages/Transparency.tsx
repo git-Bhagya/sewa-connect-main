@@ -9,17 +9,22 @@ import {
 } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export default function Transparency() {
   const { stats, loading: statsLoading } = usePlatformStats();
   const [donations, setDonations] = useState<any[]>([]);
   const [donationsLoading, setDonationsLoading] = useState(true);
+  const [limit, setLimit] = useState(50);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     const fetchDonations = async () => {
+      setDonationsLoading(true);
       try {
-        const response = await api.get('/donations/recent?limit=50');
+        const response = await api.get(`/donations/recent?limit=${limit}`);
         setDonations(response.data);
+        setHasMore(response.data.length >= limit);
       } catch (error) {
         console.error('Failed to fetch recent donations:', error);
       } finally {
@@ -27,7 +32,7 @@ export default function Transparency() {
       }
     };
     fetchDonations();
-  }, []);
+  }, [limit]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -180,28 +185,28 @@ export default function Transparency() {
              </div>
 
              <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden relative min-h-[400px]">
-               {donationsLoading ? (
+               {donationsLoading && donations.length === 0 ? (
                  <div className="absolute inset-0 flex items-center justify-center">
                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
                  </div>
                ) : donations.length > 0 ? (
-                 <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                      <thead>
-                        <tr className="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
-                          <th className="font-semibold p-4">Donor Name</th>
-                          <th className="font-semibold p-4">Allocation</th>
-                          <th className="font-semibold p-4">Date</th>
-                          <th className="font-semibold p-4 text-right">Amount</th>
+                 <div className="overflow-x-auto overflow-y-auto max-h-[600px] custom-scrollbar relative">
+                    <table className="w-full text-left border-collapse min-w-[600px]">
+                      <thead className="sticky top-0 z-10 bg-slate-100 dark:bg-slate-900 shadow-sm border-b border-slate-200 dark:border-slate-800">
+                        <tr className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
+                          <th className="font-semibold p-4 whitespace-nowrap">Donor Name</th>
+                          <th className="font-semibold p-4 whitespace-nowrap">Allocation</th>
+                          <th className="font-semibold p-4 whitespace-nowrap">Date</th>
+                          <th className="font-semibold p-4 text-right whitespace-nowrap">Amount</th>
                         </tr>
                       </thead>
                       <tbody>
                         {donations.map((donation, idx) => (
                           <tr key={idx} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-900 transition-colors">
-                            <td className="p-4 font-medium text-slate-900 dark:text-slate-100">
+                            <td className="p-4 font-medium text-slate-900 dark:text-slate-100 whitespace-nowrap">
                               {donation.donorName}
                             </td>
-                            <td className="p-4">
+                            <td className="p-4 whitespace-nowrap">
                                <div className="flex items-center gap-2">
                                  {getSectorIcon(donation.sector)}
                                  <div className="flex flex-col">
@@ -216,11 +221,11 @@ export default function Transparency() {
                                  </div>
                                </div>
                             </td>
-                            <td className="p-4 text-sm text-slate-500">
+                            <td className="p-4 text-sm text-slate-500 whitespace-nowrap">
                                {new Date(donation.createdAt).toLocaleString()}
                             </td>
-                            <td className="p-4 text-right">
-                               <div className="inline-flex items-center justify-end font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 rounded-full">
+                            <td className="p-4 text-right whitespace-nowrap">
+                               <div className="inline-flex items-center justify-end font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 rounded-full whitespace-nowrap">
                                   {formatCurrency(donation.amount)}
                                </div>
                             </td>
@@ -228,6 +233,20 @@ export default function Transparency() {
                         ))}
                       </tbody>
                     </table>
+                    
+                    {hasMore && (
+                        <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex justify-center bg-transparent">
+                            <Button 
+                                variant="outline" 
+                                onClick={() => setLimit(prev => prev + 50)} 
+                                disabled={donationsLoading}
+                                className="bg-white/50 backdrop-blur-md hover:bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-slate-900 dark:hover:bg-slate-800 shadow-sm"
+                            >
+                                {donationsLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                                Load Next 50 Donations
+                            </Button>
+                        </div>
+                    )}
                  </div>
                ) : (
                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">

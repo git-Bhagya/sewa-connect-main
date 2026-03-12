@@ -146,3 +146,4 @@ C:\Users\bhagy\Downloads\sewa-connect-main\Sewa.Backend\obj\Debug\net8.0\refint\
 C:\Users\bhagy\Downloads\sewa-connect-main\Sewa.Backend\obj\Debug\net8.0\Sewa.Backend.pdb
 C:\Users\bhagy\Downloads\sewa-connect-main\Sewa.Backend\obj\Debug\net8.0\Sewa.Backend.genruntimeconfig.cache
 C:\Users\bhagy\Downloads\sewa-connect-main\Sewa.Backend\obj\Debug\net8.0\ref\Sewa.Backend.dll
+C:\Users\bhagy\Downloads\sewa-connect-main\Sewa.Backend\obj\Debug\net8.0\Sewa.Backend.sourcelink.json
