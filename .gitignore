@@ -1,0 +1,9 @@
+Sewa.Backend/bin/
+Sewa.Backend/obj/
+Sewa.Backend/.vs/
+Sewa.Backend/build_log.txt
+Sewa.Backend/server_log*.txt
+
+# Node modules
+sewa-connect-main/node_modules/
+sewa-connect-main/dist/
