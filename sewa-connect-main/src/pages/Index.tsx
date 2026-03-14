@@ -20,7 +20,7 @@ const Index = () => {
         <AboutSection />
 
         {/* Mobile-only Donation Section at the bottom */}
-        <section className="bg-slate-50 py-12 px-4 lg:hidden border-t border-slate-200">
+        <section className="bg-slate-50 dark:bg-black py-12 px-4 lg:hidden border-t border-slate-200 dark:border-border">
           <div className="container mx-auto">
             <div className="text-center mb-8">
               <h2 className="font-serif text-3xl font-bold text-foreground mb-4">Support Our Platform</h2>

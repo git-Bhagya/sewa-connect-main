@@ -21,7 +21,7 @@ export function BottomNav() {
 
     return (
         <div
-            className="fixed bottom-0 left-0 right-0 z-[100] w-full bg-card/95 backdrop-blur-lg border-t border-border flex justify-around items-center lg:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"
+            className="fixed bottom-0 left-0 right-0 z-40 w-full bg-card/95 backdrop-blur-lg border-t border-border flex justify-around items-center lg:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"
             style={{
                 height: 'calc(4rem + env(safe-area-inset-bottom, 0px))',
                 paddingBottom: 'env(safe-area-inset-bottom, 0px)'

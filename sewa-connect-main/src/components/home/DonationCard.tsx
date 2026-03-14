@@ -68,18 +68,18 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
     };
 
     return (
-        <Card className={`bg-white backdrop-blur-2xl border-none shadow-2xl p-4 md:p-5 flex flex-col justify-center h-fit self-center ${className}`}>
+        <Card className={`bg-card text-card-foreground backdrop-blur-2xl border-none shadow-2xl p-4 md:p-5 flex flex-col justify-center h-fit self-center ${className}`}>
             <div className="space-y-4">
-                <h3 className="text-lg md:text-xl font-bold text-slate-900 flex items-center gap-2">
+                <h3 className="text-lg md:text-xl font-bold flex items-center gap-2">
                     <Heart className="w-5 h-5 text-red-500 fill-red-500" />
                     Gifts of Service
                 </h3>
 
                 <div className="space-y-4">
                     <div className="space-y-1.5">
-                        <Label className="text-[10px] uppercase font-bold text-slate-500">Target Sector</Label>
+                        <Label className="text-[10px] uppercase font-bold text-muted-foreground">Target Sector</Label>
                         <Select value={donateSector} onValueChange={setDonateSector}>
-                            <SelectTrigger className="w-full bg-slate-50 border-slate-200 h-10 text-sm text-slate-600">
+                            <SelectTrigger className="w-full bg-background border-input h-10 text-sm text-foreground">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -93,12 +93,12 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <Label className="text-[10px] uppercase font-bold text-slate-500">Amount (₹)</Label>
+                        <Label className="text-[10px] uppercase font-bold text-muted-foreground">Amount (₹)</Label>
                         <div className="flex gap-2">
                             <Input
                                 type="number"
                                 placeholder="Enter amount"
-                                className="bg-slate-50 border-slate-200 h-11 text-lg font-black"
+                                className="bg-background border-input h-11 text-lg font-black"
                                 id="donation-amount"
                                 defaultValue="500"
                             />
@@ -116,10 +116,10 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
 
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
-                            <span className="w-full border-t border-slate-100" />
+                            <span className="w-full border-t border-border" />
                         </div>
                         <div className="relative flex justify-center text-[8px] uppercase font-bold">
-                            <span className="bg-white px-2 text-slate-300">Fast UPI Access</span>
+                            <span className="bg-card px-2 text-muted-foreground">Fast UPI Access</span>
                         </div>
                     </div>
 
@@ -140,19 +140,19 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
                                 <DialogHeader>
                                     <DialogTitle className="text-center text-xl font-bold">Scan to Support</DialogTitle>
                                 </DialogHeader>
-                                <div className="flex flex-col items-center gap-6 py-6">
-                                    <div className="p-4 bg-white rounded-3xl shadow-xl border border-slate-100">
+                                <div className="flex flex-col items-center gap-6 py-6 border border-border rounded-xl">
+                                    <div className="p-4 bg-white dark:bg-white rounded-3xl shadow-xl border border-border">
                                         {donateSector === 'general' ? (
                                             <img src="/SewaQR.jpg" alt="Sewa General QR" className="w-56 h-56 object-contain" />
                                         ) : stats?.upiQrImageUrl ? (
                                             <img src={stats.upiQrImageUrl} alt="UPI QR" className="w-56 h-56 object-contain" />
                                         ) : (
-                                            <div className="w-56 h-56 bg-slate-100 flex items-center justify-center text-slate-400 font-sans text-xs">QR not uploaded</div>
+                                            <div className="w-56 h-56 flex items-center justify-center text-muted-foreground font-sans text-xs">QR not uploaded</div>
                                         )}
                                     </div>
                                     <div className="text-center">
-                                        <p className="text-lg font-bold text-slate-900">{stats?.upiId || 'Loading...'}</p>
-                                        <p className="text-xs text-slate-500 uppercase tracking-widest mt-1">Platform General Fund</p>
+                                        <p className="text-lg font-bold text-foreground">{stats?.upiId || 'Loading...'}</p>
+                                        <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Platform General Fund</p>
                                     </div>
                                 </div>
                             </DialogContent>

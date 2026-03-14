@@ -83,7 +83,7 @@ export default function Contact() {
                                     <a href="tel:+919316025425" className="text-muted-foreground hover:text-primary transition-colors">
                                         +91 93160 25425
                                     </a>
-                                    <p className="text-xs text-muted-foreground mt-1">(Mon-Fri, 9am - 6pm)</p>
+                                    <p className="text-xs text-muted-foreground mt-1">(Anytime)</p>
                                 </div>
                             </div>
                         </div>

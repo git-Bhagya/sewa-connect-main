@@ -218,7 +218,7 @@ export default function JoinVolunteer() {
                                 {
                                     icon: Shield,
                                     title: "Verified Profile",
-                                    desc: "Get a verified volunteer badge after Aadhaar verification by our admins."
+                                    desc: "Get a verified volunteer badge after Aadhaar verification by our superAdmin."
                                 },
                                 {
                                     icon: Star,
@@ -241,7 +241,7 @@ export default function JoinVolunteer() {
                         <div className="bg-muted/30 rounded-3xl p-8 md:p-12 border border-border flex flex-col md:flex-row items-center justify-between gap-8">
                             <div className="max-w-md">
                                 <h2 className="text-2xl font-bold mb-2">How it works</h2>
-                                <p className="text-muted-foreground">Log in to your account, fill out the simple volunteer form, and our SuperAdmin will verify your details within 24-48 hours.</p>
+                                <p className="text-muted-foreground">Log in to your account, fill out the simple volunteer form, and our team will verify your details within 24-48 hours.</p>
                             </div>
                             <div className="flex gap-4">
                                 <Button variant="outline" className="rounded-full" onClick={() => navigate('/about')}>Learn More</Button>

@@ -1,9 +1,15 @@
-import { Heart, Mail, Phone, MapPin, HandHeart } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Heart, Mail, Phone, HandHeart } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
 export function Footer() {
+  const location = useLocation();
+
+  if (location.pathname !== '/') {
+    return null;
+  }
+
   return (
-    <footer className="bg-foreground text-background py-16">
+    <footer className="bg-slate-50 text-foreground dark:bg-black dark:text-white py-16 border-t border-border">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
@@ -14,7 +20,7 @@ export function Footer() {
               </div>
               <span className="font-serif text-2xl font-bold">Sewa</span>
             </Link>
-            <p className="text-background/70 text-sm leading-relaxed">
+            <p className="text-muted-foreground dark:text-white/70 text-sm leading-relaxed">
               Connecting hearts with causes. Discover, support, and make a difference with trusted non-profit organizations.
             </p>
           </div>
@@ -22,18 +28,18 @@ export function Footer() {
           {/* Quick Links */}
           <div>
             <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm text-background/70">
+            <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/70">
               <li>
-                <Link to="/" className="hover:text-background transition-colors">Home</Link>
+                <Link to="/" className="hover:text-primary dark:hover:text-white transition-colors">Home</Link>
               </li>
               <li>
-                <Link to="/organizations" className="hover:text-background transition-colors">Organizations</Link>
+                <Link to="/organizations" className="hover:text-primary dark:hover:text-white transition-colors">Organizations</Link>
               </li>
               <li>
-                <Link to="/#about" className="hover:text-background transition-colors">About Us</Link>
+                <Link to="/#about" className="hover:text-primary dark:hover:text-white transition-colors">About Us</Link>
               </li>
               <li>
-                <Link to="/#sectors" className="hover:text-background transition-colors">Sectors</Link>
+                <Link to="/#sectors" className="hover:text-primary dark:hover:text-white transition-colors">Sectors</Link>
               </li>
             </ul>
           </div>
@@ -41,7 +47,7 @@ export function Footer() {
           {/* Sectors */}
           <div>
             <h4 className="font-semibold mb-4">Sectors</h4>
-            <ul className="space-y-2 text-sm text-background/70">
+            <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/70">
               <li>Old Age Homes</li>
               <li>Cow Shelters</li>
               <li>Orphanages</li>
@@ -49,28 +55,9 @@ export function Footer() {
               <li>Medical Aid</li>
             </ul>
           </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="font-semibold mb-4">Contact</h4>
-            <ul className="space-y-3 text-sm text-background/70">
-              <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                <a href="mailto:bhagyapatel832002@gmail.com" className="hover:text-background transition-colors">bhagyapatel832002@gmail.com</a>
-              </li>
-              <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                <a href="tel:+919316025425" className="hover:text-background transition-colors">+91 93160 25425</a>
-              </li>
-              <li className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 mt-0.5" />
-                <span>Ahmedabad, Gujarat, India</span>
-              </li>
-            </ul>
-          </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-background/20 text-center text-sm text-background/50">
+        <div className="mt-12 pt-8 border-t border-border/50 text-center text-sm text-muted-foreground dark:text-white/50">
           <p>© {new Date().getFullYear()} Sewa. Made with ❤️ for social good.</p>
         </div>
       </div>

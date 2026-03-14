@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sewa.Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3453625e225ac58c11f11393f0c7f99a69cb1d82")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+da153882c432247cb2de6cd40365bba2a78db3c8")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sewa.Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sewa.Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

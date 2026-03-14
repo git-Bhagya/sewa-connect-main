@@ -97,8 +97,8 @@ namespace Sewa.Backend.Controllers
                     o.ContactPhone,
                     o.ContactEmail,
                     o.ImageUrl,
-                    paymentQrImageUrl = (string?)null, // Not in current DB schema
-                    upiId = (string?)null,          // Not in current DB schema
+                    paymentQrImageUrl = o.PaymentQrImageUrl,
+                    upiId = o.UpiId,
                     o.IsActive,
                     o.CreatedAt,
                     o.CreatedBy,

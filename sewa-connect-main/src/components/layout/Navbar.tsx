@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, Heart, LogOut, Plus, Building2, User, HandHeart, Settings, MapPin, Search, Shield, LayoutDashboard, Building, Users, Clock, ChevronDown, Bell, Mail, QrCode, ArrowUpRight, Navigation } from 'lucide-react';
@@ -44,8 +44,27 @@ export function Navbar() {
   const location = useLocation();
   const { stats, loading: loadingStats } = usePlatformStats();
   const [selectedCause, setSelectedCause] = useState('general');
+  const navRef = useRef<HTMLElement>(null);
 
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      // Don't close if clicking inside a radix dropdown/dialog (portaled elements)
+      if ((event.target as Element)?.closest('[role="dialog"], [role="menu"]')) {
+        return;
+      }
+      if (isOpen && navRef.current && !navRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const { data: counts = { pendingCount: 0, volunteerPendingCount: 0, groupPendingCount: 0, inquiryPendingCount: 0 }, refetch: refetchCounts } = useQuery({
     queryKey: ['adminPendingCounts'],
@@ -185,7 +204,8 @@ export function Navbar() {
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-[100] bg-card/95 backdrop-blur-md border-b border-border transition-all duration-300"
+      ref={navRef}
+      className="fixed top-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-md border-b border-border transition-all duration-300"
       style={{
         height: 'calc(4rem + env(safe-area-inset-top, 0px))',
         paddingTop: 'env(safe-area-inset-top, 0px)'
@@ -195,8 +215,8 @@ export function Navbar() {
         <div className="flex items-center justify-between h-[4rem]">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform border border-border/50">
-              <img src="/logo.png" alt="Sewa Connect Logo" className="w-full h-full object-cover" />
+            <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform border border-border/50 bg-white p-1">
+              <img src="/logo.png" alt="Sewa Connect Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="font-serif text-xl font-bold text-foreground leading-none">Sewa<span className="text-primary ml-0.5">Connect</span></span>
@@ -245,9 +265,9 @@ export function Navbar() {
                 </DialogHeader>
                 <div className="flex flex-col items-center gap-6 py-6 font-sans">
                   <div className="w-full space-y-2">
-                    <Label className="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Select a Cause (Optional)</Label>
+                    <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Select a Cause (Optional)</Label>
                     <Select value={selectedCause} onValueChange={setSelectedCause}>
-                      <SelectTrigger className="w-full bg-slate-50 border-slate-200 h-10 text-xs">
+                      <SelectTrigger className="w-full bg-background border-border h-10 text-xs">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -260,21 +280,21 @@ export function Navbar() {
                     </Select>
                   </div>
 
-                  <div className="p-4 bg-white rounded-3xl shadow-xl border border-slate-100">
+                  <div className="p-4 bg-card rounded-3xl shadow-xl border border-border">
                     {selectedCause === 'general' ? (
-                      <img src="/SewaQR.jpg" alt="Sewa General QR" className="w-56 h-56 object-contain" />
+                      <img src="/SewaQR.jpg" alt="Sewa General QR" className="w-56 h-56 object-contain bg-white rounded-2xl" />
                     ) : stats?.upiQrImageUrl ? (
-                      <img src={stats.upiQrImageUrl} alt="Platform QR" className="w-56 h-56 object-contain" />
+                      <img src={stats.upiQrImageUrl} alt="Platform QR" className="w-56 h-56 object-contain bg-white rounded-2xl" />
                     ) : (
-                      <div className="w-56 h-56 bg-slate-100 flex items-center justify-center text-slate-400">
+                      <div className="w-56 h-56 bg-secondary/50 flex flex-col items-center justify-center text-muted-foreground rounded-2xl">
                         <QrCode className="w-12 h-12 mb-2" />
                         <span>QR not available</span>
                       </div>
                     )}
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-bold text-slate-900">{stats?.upiId || 'Loading...'}</p>
-                    <p className="text-xs text-slate-500 uppercase tracking-widest mt-1">
+                    <p className="text-lg font-bold text-foreground">{stats?.upiId || 'Loading...'}</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
                       {selectedCause === 'general' ? 'Platform General Fund' : `Fund for ${selectedCause.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}`}
                     </p>
                   </div>
@@ -712,11 +732,12 @@ export function Navbar() {
               Contact
             </Link>
 
+            <div className="flex items-center justify-between py-1.5 text-muted-foreground hover:text-foreground transition-colors">
+              <span>Theme</span>
+              <ModeToggle />
+            </div>
+
             <div className="pt-2 border-t border-border flex flex-col gap-1">
-              <div className="flex items-center justify-between px-2 mb-1">
-                <span className="text-sm font-medium">Theme</span>
-                <ModeToggle />
-              </div>
               {user ? (
                 <>
                   <Button variant="ghost" asChild className="w-full justify-start">

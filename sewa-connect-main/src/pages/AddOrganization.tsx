@@ -49,6 +49,8 @@ const organizationSchema = z.object({
   contact_phone: z.string().regex(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
   contact_email: z.string().email('Invalid email').max(100).optional().or(z.literal('')),
   upi_id: z.string().max(50).optional().or(z.literal('')),
+  registration_number: z.string().max(100).optional().or(z.literal('')),
+  tax_exemption_80g: z.string().max(100).optional().or(z.literal('')),
 });
 
 export default function AddOrganization() {
@@ -78,6 +80,8 @@ export default function AddOrganization() {
     contact_phone: string;
     contact_email: string;
     upi_id: string;
+    registration_number: string;
+    tax_exemption_80g: string;
   }>({
     name: '',
     sector: '',
@@ -88,6 +92,8 @@ export default function AddOrganization() {
     contact_phone: '',
     contact_email: '',
     upi_id: '',
+    registration_number: '',
+    tax_exemption_80g: '',
   });
 
   useEffect(() => {
@@ -258,6 +264,8 @@ export default function AddOrganization() {
         contactPhone: formData.contact_phone || null,
         contactEmail: formData.contact_email || null,
         upiId: formData.upi_id || null,
+        registrationNumber: formData.registration_number || null,
+        taxExemption80G: formData.tax_exemption_80g || null,
         imageUrl: imageUrls.length > 0 ? imageUrls[0] : null,
         images: imageUrls.map(url => ({ imageUrl: url })), // Map to backend structure
         paymentQrImageUrl: qrCodeUrl,
@@ -606,6 +614,34 @@ export default function AddOrganization() {
                   onChange={handleInputChange}
                   placeholder="Enter UPI ID"
                 />
+              </div>
+
+              {/* Legal & Tax Information */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="registration_number" className="block text-sm font-medium text-foreground mb-2">
+                    NGO Registration Number (Optional)
+                  </label>
+                  <Input
+                    id="registration_number"
+                    name="registration_number"
+                    value={formData.registration_number}
+                    onChange={handleInputChange}
+                    placeholder="E.g., Trust/Society Reg. No."
+                  />
+                </div>
+                <div>
+                  <label htmlFor="tax_exemption_80g" className="block text-sm font-medium text-foreground mb-2">
+                    80G Certificate Number (Optional)
+                  </label>
+                  <Input
+                    id="tax_exemption_80g"
+                    name="tax_exemption_80g"
+                    value={formData.tax_exemption_80g}
+                    onChange={handleInputChange}
+                    placeholder="Enter 80G number for tax benefits"
+                  />
+                </div>
               </div>
 
               {/* Submit */}
