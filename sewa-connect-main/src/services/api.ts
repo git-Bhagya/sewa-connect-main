@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Provide your exact Railway App domain here or via Vercel Environment Variables (Recommended)
-const PROD_BACKEND_URL = 'https://your-railway-app.up.railway.app/api'; 
+const PROD_BACKEND_URL = 'https://sewa-connect-main-production.up.railway.app/api'; 
 export const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? PROD_BACKEND_URL : 'http://localhost:5000/api');
 
 // Create axios instance with base URL
