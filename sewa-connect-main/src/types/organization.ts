@@ -107,13 +107,15 @@ export const mapSectorToTypeId = (sector: OrganizationSector): number => {
   }
 };
 
+import { API_BASE_URL } from '../services/api';
+
 const getFullImageUrl = (url: string | null) => {
   if (!url) return null;
   // If it's already a full external URL, return it
   if (url.startsWith('http') && !url.includes('localhost') && !url.includes('127.0.0.1')) return url;
 
-  // Get the base API URL (e.g., http://localhost:5000/api -> http://localhost:5000)
-  const apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace('/api', '');
+  // Get the base API URL without /api trailing path
+  const apiBase = API_BASE_URL.replace('/api', '');
 
   // If the stored URL is absolute localhost but with wrong port, replace it
   if (url.includes('localhost') || url.includes('127.0.0.1')) {
