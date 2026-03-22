@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from 'sonner';
 import api from '@/services/api';
 import { useNavigate } from 'react-router-dom';
@@ -129,10 +130,32 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
                     </div>
 
                     <div className="flex gap-3">
-                        <Button className="flex-1 h-11 text-xs font-bold shadow-lg shadow-primary/20" onClick={() => handlePayClick('')}>
-                            <ArrowUpRight className="w-4 h-4 mr-1.5" />
-                            Use Any UPI App
-                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button className="flex-1 h-11 text-xs font-bold shadow-lg shadow-primary/20">
+                                    <ArrowUpRight className="w-4 h-4 mr-1.5" />
+                                    Pay with UPI App
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56 p-2 rounded-xl" align="center">
+                                <DropdownMenuItem onClick={() => handlePayClick('com.google.android.apps.nbu.paisa.user')} className="cursor-pointer py-3 font-bold flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-slate-600" /></div>
+                                    Google Pay
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handlePayClick('com.phonepe.app')} className="cursor-pointer py-3 font-bold flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-slate-600" /></div>
+                                    PhonePe
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handlePayClick('net.one97.paytm')} className="cursor-pointer py-3 font-bold flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-slate-600" /></div>
+                                    Paytm
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handlePayClick('')} className="cursor-pointer py-3 font-bold flex items-center gap-3 text-primary">
+                                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-primary" /></div>
+                                    Other Apps
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
                         <Dialog>
                             <DialogTrigger asChild>
@@ -162,17 +185,6 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
                         </Dialog>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 mt-3">
-                        <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => handlePayClick('com.google.android.apps.nbu.paisa.user')}>
-                            GPay
-                        </Button>
-                        <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => handlePayClick('com.phonepe.app')}>
-                            PhonePe
-                        </Button>
-                        <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => handlePayClick('net.one97.paytm')}>
-                            Paytm
-                        </Button>
-                    </div>
                 </div>
             </div>
         </Card>

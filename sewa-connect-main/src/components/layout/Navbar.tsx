@@ -296,36 +296,48 @@ export function Navbar() {
                       {selectedCause === 'general' ? 'Platform General Fund' : `Fund for ${selectedCause.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}`}
                     </p>
                   </div>
-                  <div className="flex gap-2">
-                    <Button className="flex-1 font-bold" onClick={() => {
-                        const upi = stats?.upiId || "sewaconnect@upi";
-                        const note = selectedCause === 'general' ? 'Sewa Connect Donation' : `Sewa Connect: ${selectedCause.replace('_', ' ')} donation`;
-                        const params = new URLSearchParams({ pa: upi, pn: 'Sewa Connect', tn: note, cu: 'INR' });
-                        const isAndroid = /Android/i.test(navigator.userAgent);
-                        if (!isAndroid && !/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                          toast.info("UPI App redirection works best on mobile.", { description: "Please scan the QR code on desktop." });
-                          return;
-                        }
-                        window.location.href = `upi://pay?${params.toString()}`;
-                    }}>
-                      <ArrowUpRight className="w-4 h-4 mr-1.5" />
-                      Any UPI App
-                    </Button>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2 mt-3 block lg:hidden">
-                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
-                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
-                          window.location.href = `intent://pay?${p.toString()}#Intent;package=com.google.android.apps.nbu.paisa.user;scheme=upi;end`;
-                      }}>GPay</Button>
-                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
-                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
-                          window.location.href = `intent://pay?${p.toString()}#Intent;package=com.phonepe.app;scheme=upi;end`;
-                      }}>PhonePe</Button>
-                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
-                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
-                          window.location.href = `intent://pay?${p.toString()}#Intent;package=net.one97.paytm;scheme=upi;end`;
-                      }}>Paytm</Button>
-                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button className="w-full font-bold">
+                        <ArrowUpRight className="w-4 h-4 mr-1.5" />
+                        Pay with UPI App
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56 p-2 rounded-xl" align="center">
+                        <DropdownMenuItem onClick={() => {
+                            const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                            window.location.href = `intent://pay?${p.toString()}#Intent;package=com.google.android.apps.nbu.paisa.user;scheme=upi;end`;
+                        }} className="cursor-pointer py-3 font-bold flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-slate-600" /></div>
+                            Google Pay
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => {
+                            const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                            window.location.href = `intent://pay?${p.toString()}#Intent;package=com.phonepe.app;scheme=upi;end`;
+                        }} className="cursor-pointer py-3 font-bold flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-slate-600" /></div>
+                            PhonePe
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => {
+                            const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                            window.location.href = `intent://pay?${p.toString()}#Intent;package=net.one97.paytm;scheme=upi;end`;
+                        }} className="cursor-pointer py-3 font-bold flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-slate-600" /></div>
+                            Paytm
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => {
+                            const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                            if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                              toast.info("UPI App redirection works best on mobile.", { description: "Please scan the QR code on desktop." });
+                              return;
+                            }
+                            window.location.href = `upi://pay?${p.toString()}`;
+                        }} className="cursor-pointer py-3 font-bold flex items-center gap-3 text-primary">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-primary" /></div>
+                            Other Apps
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </DialogContent>
             </Dialog>
@@ -526,35 +538,48 @@ export function Navbar() {
                       {selectedCause === 'general' ? 'Platform General Fund' : `Fund for ${selectedCause.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}`}
                     </p>
                   </div>
-                  <div className="flex gap-2">
-                    <Button className="w-full font-bold" onClick={() => {
-                        const upi = stats?.upiId || "sewaconnect@upi";
-                        const note = selectedCause === 'general' ? 'Sewa Connect Donation' : `Sewa Connect: ${selectedCause.replace('_', ' ')} donation`;
-                        const params = new URLSearchParams({ pa: upi, pn: 'Sewa Connect', tn: note, cu: 'INR' });
-                        if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                          toast.info("UPI App redirection works best on mobile.", { description: "Please scan the QR code on desktop." });
-                          return;
-                        }
-                        window.location.href = `upi://pay?${params.toString()}`;
-                    }}>
-                      <ArrowUpRight className="w-4 h-4 mr-2" />
-                      Any UPI App
-                    </Button>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2 mt-3 block lg:hidden">
-                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
-                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
-                          window.location.href = `intent://pay?${p.toString()}#Intent;package=com.google.android.apps.nbu.paisa.user;scheme=upi;end`;
-                      }}>GPay</Button>
-                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
-                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
-                          window.location.href = `intent://pay?${p.toString()}#Intent;package=com.phonepe.app;scheme=upi;end`;
-                      }}>PhonePe</Button>
-                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
-                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
-                          window.location.href = `intent://pay?${p.toString()}#Intent;package=net.one97.paytm;scheme=upi;end`;
-                      }}>Paytm</Button>
-                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button className="w-full font-bold">
+                        <ArrowUpRight className="w-4 h-4 mr-1.5" />
+                        Pay with UPI App
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56 p-2 rounded-xl" align="center">
+                        <DropdownMenuItem onClick={() => {
+                            const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                            window.location.href = `intent://pay?${p.toString()}#Intent;package=com.google.android.apps.nbu.paisa.user;scheme=upi;end`;
+                        }} className="cursor-pointer py-3 font-bold flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-slate-600" /></div>
+                            Google Pay
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => {
+                            const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                            window.location.href = `intent://pay?${p.toString()}#Intent;package=com.phonepe.app;scheme=upi;end`;
+                        }} className="cursor-pointer py-3 font-bold flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-slate-600" /></div>
+                            PhonePe
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => {
+                            const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                            window.location.href = `intent://pay?${p.toString()}#Intent;package=net.one97.paytm;scheme=upi;end`;
+                        }} className="cursor-pointer py-3 font-bold flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-slate-600" /></div>
+                            Paytm
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => {
+                            const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                            if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                              toast.info("UPI App redirection works best on mobile.", { description: "Please scan the QR code on desktop." });
+                              return;
+                            }
+                            window.location.href = `upi://pay?${p.toString()}`;
+                        }} className="cursor-pointer py-3 font-bold flex items-center gap-3 text-primary">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center"><ArrowUpRight className="w-4 h-4 text-primary" /></div>
+                            Other Apps
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </DialogContent>
             </Dialog>
