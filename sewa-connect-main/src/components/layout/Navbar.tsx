@@ -169,9 +169,9 @@ export function Navbar() {
       console.warn("Geolocation permission denied or failed:", error.message);
       // If permission error, we don't bother the user with a toast, just use default/stored
     }, {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
+      enableHighAccuracy: false,
+      timeout: 10000,
+      maximumAge: 60000
     });
   };
 
@@ -296,28 +296,36 @@ export function Navbar() {
                       {selectedCause === 'general' ? 'Platform General Fund' : `Fund for ${selectedCause.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}`}
                     </p>
                   </div>
-                  <Button className="w-full font-bold" onClick={() => {
-                      const upi = stats?.upiId || "sewaconnect@upi";
-                      const note = selectedCause === 'general' ? 'Sewa Connect Donation' : `Sewa Connect: ${selectedCause.replace('_', ' ')} donation`;
-                      const params = new URLSearchParams({
-                        pa: upi,
-                        pn: 'Sewa Connect',
-                        tn: note,
-                        cu: 'INR'
-                      });
-                      const url = `upi://pay?${params.toString()}`;
-
-                      if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                        toast.info("UPI App redirection works best on mobile.", {
-                          description: "Please scan the QR code on desktop."
-                        });
-                        return;
-                      }
-                      window.location.href = url;
-                  }}>
-                    <ArrowUpRight className="w-4 h-4 mr-2" />
-                    Pay with UPI App
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button className="flex-1 font-bold" onClick={() => {
+                        const upi = stats?.upiId || "sewaconnect@upi";
+                        const note = selectedCause === 'general' ? 'Sewa Connect Donation' : `Sewa Connect: ${selectedCause.replace('_', ' ')} donation`;
+                        const params = new URLSearchParams({ pa: upi, pn: 'Sewa Connect', tn: note, cu: 'INR' });
+                        const isAndroid = /Android/i.test(navigator.userAgent);
+                        if (!isAndroid && !/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                          toast.info("UPI App redirection works best on mobile.", { description: "Please scan the QR code on desktop." });
+                          return;
+                        }
+                        window.location.href = `upi://pay?${params.toString()}`;
+                    }}>
+                      <ArrowUpRight className="w-4 h-4 mr-1.5" />
+                      Any UPI App
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 mt-3 block lg:hidden">
+                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
+                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                          window.location.href = `intent://pay?${p.toString()}#Intent;package=com.google.android.apps.nbu.paisa.user;scheme=upi;end`;
+                      }}>GPay</Button>
+                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
+                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                          window.location.href = `intent://pay?${p.toString()}#Intent;package=com.phonepe.app;scheme=upi;end`;
+                      }}>PhonePe</Button>
+                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
+                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                          window.location.href = `intent://pay?${p.toString()}#Intent;package=net.one97.paytm;scheme=upi;end`;
+                      }}>Paytm</Button>
+                  </div>
                 </div>
               </DialogContent>
             </Dialog>
@@ -518,28 +526,35 @@ export function Navbar() {
                       {selectedCause === 'general' ? 'Platform General Fund' : `Fund for ${selectedCause.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}`}
                     </p>
                   </div>
-                  <Button className="w-full font-bold" onClick={() => {
-                      const upi = stats?.upiId || "sewaconnect@upi";
-                      const note = selectedCause === 'general' ? 'Sewa Connect Donation' : `Sewa Connect: ${selectedCause.replace('_', ' ')} donation`;
-                      const params = new URLSearchParams({
-                        pa: upi,
-                        pn: 'Sewa Connect',
-                        tn: note,
-                        cu: 'INR'
-                      });
-                      const url = `upi://pay?${params.toString()}`;
-
-                      if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                        toast.info("UPI App redirection works best on mobile.", {
-                          description: "Please scan the QR code on desktop."
-                        });
-                        return;
-                      }
-                      window.location.href = url;
-                  }}>
-                    <ArrowUpRight className="w-4 h-4 mr-2" />
-                    Pay with UPI App
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button className="w-full font-bold" onClick={() => {
+                        const upi = stats?.upiId || "sewaconnect@upi";
+                        const note = selectedCause === 'general' ? 'Sewa Connect Donation' : `Sewa Connect: ${selectedCause.replace('_', ' ')} donation`;
+                        const params = new URLSearchParams({ pa: upi, pn: 'Sewa Connect', tn: note, cu: 'INR' });
+                        if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                          toast.info("UPI App redirection works best on mobile.", { description: "Please scan the QR code on desktop." });
+                          return;
+                        }
+                        window.location.href = `upi://pay?${params.toString()}`;
+                    }}>
+                      <ArrowUpRight className="w-4 h-4 mr-2" />
+                      Any UPI App
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 mt-3 block lg:hidden">
+                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
+                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                          window.location.href = `intent://pay?${p.toString()}#Intent;package=com.google.android.apps.nbu.paisa.user;scheme=upi;end`;
+                      }}>GPay</Button>
+                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
+                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                          window.location.href = `intent://pay?${p.toString()}#Intent;package=com.phonepe.app;scheme=upi;end`;
+                      }}>PhonePe</Button>
+                      <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => {
+                          const p = new URLSearchParams({ pa: stats?.upiId || "sewaconnect@upi", pn: 'Sewa Connect', tn: 'Donation', cu: 'INR' });
+                          window.location.href = `intent://pay?${p.toString()}#Intent;package=net.one97.paytm;scheme=upi;end`;
+                      }}>Paytm</Button>
+                  </div>
                 </div>
               </DialogContent>
             </Dialog>

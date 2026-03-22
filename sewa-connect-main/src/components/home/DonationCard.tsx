@@ -21,7 +21,7 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
     const navigate = useNavigate();
     const [donateSector, setDonateSector] = useState('general');
 
-    const getUpiUrl = (sector: string) => {
+    const getUpiUrl = (sector: string, appPackage: string = '') => {
         const upi = stats?.upiId || "sewaconnect@upi";
         const note = sector === 'general' ? 'Donation to Sewa Connect' : `Donation for ${sector.replace('_', ' ')} via Sewa Connect`;
         const params = new URLSearchParams({
@@ -30,11 +30,15 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
             tn: note,
             cu: 'INR'
         });
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        if (isAndroid && appPackage) {
+            return `intent://pay?${params.toString()}#Intent;package=${appPackage};scheme=upi;end`;
+        }
         return `upi://pay?${params.toString()}`;
     };
 
-    const handlePayClick = () => {
-        const url = getUpiUrl(donateSector);
+    const handlePayClick = (appPackage: string = '') => {
+        const url = getUpiUrl(donateSector, appPackage);
         if (!url) {
             toast.error("Payment details not available");
             return;
@@ -125,9 +129,9 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
                     </div>
 
                     <div className="flex gap-3">
-                        <Button className="flex-1 h-11 text-xs font-bold shadow-lg shadow-primary/20" onClick={handlePayClick}>
+                        <Button className="flex-1 h-11 text-xs font-bold shadow-lg shadow-primary/20" onClick={() => handlePayClick('')}>
                             <ArrowUpRight className="w-4 h-4 mr-1.5" />
-                            Pay App
+                            Use Any UPI App
                         </Button>
 
                         <Dialog>
@@ -156,6 +160,18 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
                                 </div>
                             </DialogContent>
                         </Dialog>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2 mt-3">
+                        <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => handlePayClick('com.google.android.apps.nbu.paisa.user')}>
+                            GPay
+                        </Button>
+                        <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => handlePayClick('com.phonepe.app')}>
+                            PhonePe
+                        </Button>
+                        <Button variant="secondary" className="h-9 text-[10px] font-bold" onClick={() => handlePayClick('net.one97.paytm')}>
+                            Paytm
+                        </Button>
                     </div>
                 </div>
             </div>
