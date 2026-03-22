@@ -35,7 +35,8 @@ export default function Profile() {
     });
     const [profileInfo, setProfileInfo] = useState({
         fullName: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        dateOfBirth: ''
     });
     const [savingPrefs, setSavingPrefs] = useState(false);
     const [savingInfo, setSavingInfo] = useState(false);
@@ -49,7 +50,8 @@ export default function Profile() {
                 }
                 setProfileInfo({
                     fullName: response.data.fullName || '',
-                    phoneNumber: response.data.phoneNumber || ''
+                    phoneNumber: response.data.phoneNumber || '',
+                    dateOfBirth: response.data.dateOfBirth ? new Date(response.data.dateOfBirth).toISOString().split('T')[0] : ''
                 });
             } catch (error) {
                 console.error("Failed to fetch profile", error);
@@ -166,6 +168,15 @@ export default function Profile() {
                                             placeholder="Enter phone number"
                                             value={profileInfo.phoneNumber}
                                             onChange={(e) => setProfileInfo({ ...profileInfo, phoneNumber: e.target.value })}
+                                            className="bg-background/50 border-border/50 focus:ring-primary/20"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label className="text-xs uppercase font-bold tracking-widest opacity-60">Date of Birth</Label>
+                                        <Input
+                                            type="date"
+                                            value={profileInfo.dateOfBirth}
+                                            onChange={(e) => setProfileInfo({ ...profileInfo, dateOfBirth: e.target.value })}
                                             className="bg-background/50 border-border/50 focus:ring-primary/20"
                                         />
                                     </div>

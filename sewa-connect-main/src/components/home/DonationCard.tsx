@@ -22,10 +22,10 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
     const [donateSector, setDonateSector] = useState('general');
 
     const getUpiUrl = (sector: string) => {
-        if (!stats?.upiId) return "";
+        const upi = stats?.upiId || "sewaconnect@upi";
         const note = sector === 'general' ? 'Donation to Sewa Connect' : `Donation for ${sector.replace('_', ' ')} via Sewa Connect`;
         const params = new URLSearchParams({
-            pa: stats.upiId,
+            pa: upi,
             pn: 'Sewa Connect',
             tn: note,
             cu: 'INR'
@@ -45,6 +45,7 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
             toast.info("UPI App redirection works best on mobile. Please use 'View QR' on desktop.", {
                 description: "Scan the QR code with any UPI app like GPay, PhonePe, or Paytm."
             });
+            return;
         }
         window.location.href = url;
     };
@@ -82,7 +83,7 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
                             <SelectTrigger className="w-full bg-background border-input h-10 text-sm text-foreground">
                                 <SelectValue />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-popover text-popover-foreground">
                                 <SelectItem value="general">General Sewa Fund</SelectItem>
                                 <SelectItem value="animal_care">Animal Welfare</SelectItem>
                                 <SelectItem value="education">Child Education</SelectItem>
@@ -142,16 +143,14 @@ export function DonationCard({ stats, className, onSuccess }: DonationCardProps)
                                 </DialogHeader>
                                 <div className="flex flex-col items-center gap-6 py-6 border border-border rounded-xl">
                                     <div className="p-4 bg-white dark:bg-white rounded-3xl shadow-xl border border-border">
-                                        {donateSector === 'general' ? (
-                                            <img src="/SewaQR.jpg" alt="Sewa General QR" className="w-56 h-56 object-contain" />
-                                        ) : stats?.upiQrImageUrl ? (
+                                        {stats?.upiQrImageUrl ? (
                                             <img src={stats.upiQrImageUrl} alt="UPI QR" className="w-56 h-56 object-contain" />
                                         ) : (
-                                            <div className="w-56 h-56 flex items-center justify-center text-muted-foreground font-sans text-xs">QR not uploaded</div>
+                                            <img src="/SewaQR.jpg" alt="Sewa General QR" className="w-56 h-56 object-contain" />
                                         )}
                                     </div>
                                     <div className="text-center">
-                                        <p className="text-lg font-bold text-foreground">{stats?.upiId || 'Loading...'}</p>
+                                        <p className="text-lg font-bold text-foreground">{stats?.upiId || 'sewaconnect@upi'}</p>
                                         <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Platform General Fund</p>
                                     </div>
                                 </div>

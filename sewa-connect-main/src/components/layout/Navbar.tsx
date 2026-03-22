@@ -95,6 +95,9 @@ export function Navbar() {
   const { pendingCount, volunteerPendingCount, groupPendingCount, inquiryPendingCount } = counts;
 
   useEffect(() => {
+    // Clear manual location flag on app refresh so it auto-detects again
+    localStorage.removeItem('userHasManuallySelectedCity');
+
     const fetchCities = async () => {
       try {
         const res = await api.get('/organizations/cities');
@@ -212,7 +215,7 @@ export function Navbar() {
       }}
     >
       <div className="container mx-auto px-4 h-full">
-        <div className="flex items-center justify-between h-[4rem]">
+        <div className="flex items-center justify-between h-[4rem] gap-2 md:gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
             <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform border border-border/50 bg-white p-1">
@@ -281,28 +284,23 @@ export function Navbar() {
                   </div>
 
                   <div className="p-4 bg-card rounded-3xl shadow-xl border border-border">
-                    {selectedCause === 'general' ? (
-                      <img src="/SewaQR.jpg" alt="Sewa General QR" className="w-56 h-56 object-contain bg-white rounded-2xl" />
-                    ) : stats?.upiQrImageUrl ? (
+                    {stats?.upiQrImageUrl ? (
                       <img src={stats.upiQrImageUrl} alt="Platform QR" className="w-56 h-56 object-contain bg-white rounded-2xl" />
                     ) : (
-                      <div className="w-56 h-56 bg-secondary/50 flex flex-col items-center justify-center text-muted-foreground rounded-2xl">
-                        <QrCode className="w-12 h-12 mb-2" />
-                        <span>QR not available</span>
-                      </div>
+                      <img src="/SewaQR.jpg" alt="Sewa General QR" className="w-56 h-56 object-contain bg-white rounded-2xl" />
                     )}
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-bold text-foreground">{stats?.upiId || 'Loading...'}</p>
+                    <p className="text-lg font-bold text-foreground">{stats?.upiId || 'sewaconnect@upi'}</p>
                     <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
                       {selectedCause === 'general' ? 'Platform General Fund' : `Fund for ${selectedCause.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}`}
                     </p>
                   </div>
                   <Button className="w-full font-bold" onClick={() => {
-                    if (stats?.upiId) {
+                      const upi = stats?.upiId || "sewaconnect@upi";
                       const note = selectedCause === 'general' ? 'Sewa Connect Donation' : `Sewa Connect: ${selectedCause.replace('_', ' ')} donation`;
                       const params = new URLSearchParams({
-                        pa: stats.upiId,
+                        pa: upi,
                         pn: 'Sewa Connect',
                         tn: note,
                         cu: 'INR'
@@ -313,9 +311,9 @@ export function Navbar() {
                         toast.info("UPI App redirection works best on mobile.", {
                           description: "Please scan the QR code on desktop."
                         });
+                        return;
                       }
                       window.location.href = url;
-                    }
                   }}>
                     <ArrowUpRight className="w-4 h-4 mr-2" />
                     Pay with UPI App
@@ -492,9 +490,9 @@ export function Navbar() {
                 </DialogHeader>
                 <div className="flex flex-col items-center gap-6 py-6 font-sans">
                   <div className="w-full space-y-2">
-                    <Label className="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Select a Cause (Optional)</Label>
+                    <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Select a Cause (Optional)</Label>
                     <Select value={selectedCause} onValueChange={setSelectedCause}>
-                      <SelectTrigger className="w-full bg-slate-50 border-slate-200 h-10 text-xs">
+                      <SelectTrigger className="w-full bg-background border-border h-10 text-xs">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -507,29 +505,37 @@ export function Navbar() {
                     </Select>
                   </div>
 
-                  <div className="p-4 bg-white rounded-3xl shadow-xl border border-slate-100">
-                    {selectedCause === 'general' ? (
-                      <img src="/SewaQR.jpg" alt="Sewa General QR" className="w-56 h-56 object-contain" />
-                    ) : stats?.upiQrImageUrl ? (
-                      <img src={stats.upiQrImageUrl} alt="Platform QR" className="w-56 h-56 object-contain" />
+                  <div className="p-4 bg-card rounded-3xl shadow-xl border border-border">
+                    {stats?.upiQrImageUrl ? (
+                      <img src={stats.upiQrImageUrl} alt="Platform QR" className="w-56 h-56 object-contain bg-white rounded-2xl" />
                     ) : (
-                      <div className="w-56 h-56 bg-slate-100 flex items-center justify-center text-slate-400">
-                        <QrCode className="w-12 h-12 mb-2" />
-                        <span>QR not available</span>
-                      </div>
+                      <img src="/SewaQR.jpg" alt="Sewa General QR" className="w-56 h-56 object-contain bg-white rounded-2xl" />
                     )}
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-bold text-slate-900">{stats?.upiId || 'Loading...'}</p>
-                    <p className="text-xs text-slate-500 uppercase tracking-widest mt-1">
+                    <p className="text-lg font-bold text-foreground">{stats?.upiId || 'sewaconnect@upi'}</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1">
                       {selectedCause === 'general' ? 'Platform General Fund' : `Fund for ${selectedCause.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}`}
                     </p>
                   </div>
                   <Button className="w-full font-bold" onClick={() => {
-                    if (stats?.upiId) {
+                      const upi = stats?.upiId || "sewaconnect@upi";
                       const note = selectedCause === 'general' ? 'Sewa Connect Donation' : `Sewa Connect: ${selectedCause.replace('_', ' ')} donation`;
-                      window.location.href = `upi://pay?pa=${stats.upiId}&pn=Sewa%20Connect&tn=${encodeURIComponent(note)}&cu=INR`;
-                    }
+                      const params = new URLSearchParams({
+                        pa: upi,
+                        pn: 'Sewa Connect',
+                        tn: note,
+                        cu: 'INR'
+                      });
+                      const url = `upi://pay?${params.toString()}`;
+
+                      if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                        toast.info("UPI App redirection works best on mobile.", {
+                          description: "Please scan the QR code on desktop."
+                        });
+                        return;
+                      }
+                      window.location.href = url;
                   }}>
                     <ArrowUpRight className="w-4 h-4 mr-2" />
                     Pay with UPI App

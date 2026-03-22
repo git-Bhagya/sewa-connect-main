@@ -29,6 +29,29 @@ export default function PaymentGateway() {
     const handleProcessPayment = async () => {
         setIsProcessing(true);
 
+        // --- PRODUCTION RAZORPAY INTEGRATION PREPARATION ---
+        // To use production Razorpay:
+        // 1. Fetch Razorpay Order ID from backend here (`/api/donations/create-order`) 
+        //    passing `amount`, `sector`, and `organizationId` (to support org-specific routing/accounts).
+        //    By passing 'organizationId', the backend can generate orders specific to 
+        //    an organization's linked Razorpay account (Razorpay Route).
+        // 2. Initialize Razorpay checkout:
+        //    const options = {
+        //        key: "YOUR_RAZORPAY_KEY", // Or dynamically fetched org specific key
+        //        amount: amount * 100,
+        //        currency: "INR",
+        //        name: state.name || "Sewa Connect",
+        //        description: `Donation for ${state.sector}`,
+        //        order_id: data.orderId,
+        //        handler: async (response) => { 
+        //             // Verify payment on backend, then:
+        //             // navigate('/payment/success', ...)
+        //        }
+        //    };
+        //    const rzp = new (window as any).Razorpay(options);
+        //    rzp.open();
+        // ---------------------------------------------------
+
         // Simulating processing delay like a real gateway
         await new Promise(resolve => setTimeout(resolve, 2000));
 

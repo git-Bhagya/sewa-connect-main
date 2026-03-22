@@ -113,7 +113,14 @@ app.MapGet("/", () => Results.Redirect("/swagger"));
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SewaDbContext>();
-    db.Database.Migrate(); // Uncomment if you want auto-migrations
+    try 
+    {
+        db.Database.Migrate(); 
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Migration skipped or failed: {ex.Message}");
+    }
 }
 
 app.Run();

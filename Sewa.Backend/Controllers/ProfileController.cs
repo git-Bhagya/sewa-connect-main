@@ -41,6 +41,7 @@ namespace Sewa.Backend.Controllers
                 user.FullName,
                 user.PhoneNumber,
                 user.CreatedAt,
+                user.DateOfBirth,
                 Roles = user.UserRoles.Select(ur => ur.Role.RoleName),
                 user.Preference
             });
@@ -59,6 +60,7 @@ namespace Sewa.Backend.Controllers
 
             user.FullName = updateModel.FullName;
             user.PhoneNumber = updateModel.PhoneNumber;
+            user.DateOfBirth = updateModel.DateOfBirth;
 
             await _context.SaveChangesAsync();
             return Ok(new { message = "Profile updated successfully." });
@@ -105,6 +107,7 @@ namespace Sewa.Backend.Controllers
     {
         public string? FullName { get; set; }
         public string? PhoneNumber { get; set; }
+        public DateTime? DateOfBirth { get; set; }
     }
 
     public class UpdatePreferencesDto
